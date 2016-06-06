@@ -1,0 +1,116 @@
+/* 
+    Created on : Jan 31, 2016, 3:50:32 PM
+    Author     : Nikolay Krasnikov
+*/
+
+.login-form {
+    width: 700px; 
+    margin-top: 50px; 
+    padding: 20px 10px; 
+    padding-left: 50px; 
+    background: #526C85; 
+    vertical-align: middle; 
+    text-align: left;
+    font-family: 'Muli', sans-serif;
+    font-size: 16px;
+    color: #FFF;
+}
+
+div.form-holder {
+    width: 100%; 
+    background: #fff; 
+    margin: 0px 0 10px 0; 
+    border-top: 1px solid #36454F; 
+    border-bottom: 1px solid #36454F; 
+    display: table; 
+    vertical-align: middle; 
+    overflow: hidden; 
+    padding: 15px;
+    color: #555;
+}
+
+div.cell-caption {
+    font-family: 'Muli', sans-serif; 
+    font-size: 12pt; 
+    width: 40%; 
+    display: table-cell; 
+    vertical-align: middle; 
+    text-align: right;
+    color: #555;
+    padding-right: 5px;
+}
+
+div.cell-caption.red {
+    color: #9F4B87;
+    font-weight: bold;
+}
+
+div.cell-data {
+    font-family: 'Muli', sans-serif; 
+    text-align: right; 
+    color: #555; 
+    width: auto; 
+    display: table-cell; 
+    vertical-align: middle;
+    padding: 0.5em;
+    text-align: left;
+}
+
+div.form-row {
+    display: table-row;
+    width: 100%;
+    height: auto;
+    padding: 0.5em;
+    vertical-align: middle;
+}
+
+.selectable {
+    width: 250px;
+    padding: 0.5em;
+    font-size: 1em;
+    border: 1px solid #AFAFAF;
+}
+
+.data-entry {
+	background-color: #fcfcfc;
+	border: 1px solid #AFAFAF;
+	font-size: 1em;
+	padding: 0.5em 0 0.5em 0.2em;
+        width: 250px;
+}
+
+.form-text {
+    width: 250px;
+    height: 150px;
+    font-family: monospace;
+    border: 1px solid #AFAFAF;
+}
+
+.errors {
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+    background: #D13F31;
+    font-family: 'Muli', sans-serif;
+    font-size: 12pt;
+    color: #FFF;
+    margin-bottom: 5px;
+}
+
+/* Styling Date Picker Widgets */
+
+[id$="_day"] {
+    width: 50px;
+    border: 1px solid #AFAFAF;
+}
+
+[id$="_month"] {
+    width: 110px;
+    border: 1px solid #AFAFAF;
+}
+
+[id$="_year"] {
+    width: 82px;
+    border: 1px solid #AFAFAF;
+}
+

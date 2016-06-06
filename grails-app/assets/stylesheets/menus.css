@@ -1,0 +1,106 @@
+/* 
+    Created on : Feb 21, 2016, 10:54:08 AM
+    Author     : Nikolay Krasnikov
+*/
+
+.application-header {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 26pt;
+    color: #36454f;
+    width: 100%;
+    display: block;
+    text-align: left;
+    padding: 5px 0 10px 10px;
+    border-bottom: 1px solid #36454f;
+}
+div.top-menu-container {
+    width: 100%;
+    padding: 10px 5px;
+    vertical-align: middle;
+    overflow: hidden;
+    background: #36454f;
+}
+
+div.right-menu-pane {
+    float: right;
+    width: auto;
+    display: inline-block;
+    overflow: hidden;
+    padding-right: 5px;
+}
+
+div.left-menu-pane {
+    float: left;
+    width: auto;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: baseline;
+    font-family: 'Muli', sans-serif;
+    color: #efefef;
+    padding: 0 0 0 10px;
+}
+
+.tile {
+    text-decoration: none; 
+    text-align: center; 
+    vertical-align: middle; 
+    cursor: pointer; 
+    width: 220px; 
+    height: 80px; 
+    display: table-cell; 
+    /*background-color: #3c9bae;*/
+/*    background-color: #6285C7;*/
+    background-color: #668099;
+    color: #fff; 
+    margin-bottom: -5px;
+    transition: all 1.5s;
+    /*background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #555555), color-stop(1, #3c9bae));*/
+}
+
+.tile:hover {
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(#555555, 0), color-stop(1, #6285C7));
+    background-color: deepskyblue;
+    transition: all 0.5s;
+    border-radius: 0px;
+}
+
+.tile:active {
+    position: relative;
+    top: 2px;
+}
+
+/**
+ *  Top Main Menu Elements
+ */
+a.menu-item {
+    padding: 5px 15px;
+    font-family: 'Muli', sans-serif;
+    color: #efefef;
+    font-size: 16px;
+    background: #36454f;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.5s;
+    outline: none;
+}
+
+a.menu-item .righted {
+    float: right;
+    
+}
+a.menu-item:hover {
+    background: #ffa500;
+    transition: all 0.5s;
+}
+
+span.active {
+    padding: 5px 15px;
+    font-family: 'Muli', sans-serif;
+    color: #20b2aa;
+    font-size: 16px;
+    font-weight: bold;
+    background: #36454f;
+    display: inline-block;
+    border: 1px solid #20b2aa;
+}
+

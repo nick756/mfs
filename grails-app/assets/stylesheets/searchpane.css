@@ -1,0 +1,65 @@
+/* 
+    Created on : Feb 29, 2016, 6:34:23 PM
+    Author     : Nikolay Krasnikov
+*/
+
+.search-pane {
+    width: 100%;
+    padding: 0.6em;
+    margin-bottom: 0.5em;
+    background: #dedede;
+    display: table;
+    border-collapse: separate;
+    border-spacing: 0.5em;
+    border: 1px solid #AFAFAF;
+}
+
+.search-row {
+    display: table-row;
+}
+
+.search-cell {
+    display: table-cell;
+}
+
+.left-search-pane {
+    width: 46%;
+    float: left;
+    overflow: hidden;
+    display: inline-block;
+    padding: 0;
+}
+
+.right-search-pane {
+    width: 46%;
+    float: left;
+    overflow: hidden;
+    display: inline-block;
+    padding: 0;
+}
+
+.actions-search-pane {
+    width: 7%;
+    float: right;
+    overflow: hidden;
+    display: inline-block;
+    border: 0px solid #666;
+    height: 100%;
+    text-align: center;
+    vertical-align: top;
+}
+
+.action-image {
+    outline: none;
+    transition: all 0.7s;
+}
+
+.action-image:hover {
+    opacity: 0.3;
+    transition: all 0.7s;    
+}
+
+.action-image:active {
+    position: relative;
+    top: 1px    
+}

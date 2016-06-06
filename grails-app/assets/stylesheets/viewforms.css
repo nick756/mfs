@@ -1,0 +1,98 @@
+.view-form-container {
+    width: 100%;
+    padding: 0;
+    display: table;
+    background: #FFF;
+    color: #101010;
+    font-family: 'Muli', sans-serif;
+}
+
+.view-row {
+    display: table-row;
+    width: 100%;
+    height: auto;
+    padding: 0.5em;
+    vertical-align: middle;
+}
+
+.view-blank-row {
+    width: 100%;
+    display: table-row;
+    height: auto;
+    padding: 1em 0;
+}
+
+.view-cell-caption {
+    font-family: 'Muli', sans-serif; 
+    font-size: 12pt; 
+    width: 30%; 
+    display: table-cell; 
+    vertical-align: top; 
+    text-align: right;
+    padding-top: 0.6em;
+    padding-right: 5px;    
+}
+
+.view-cell-content {
+    font-family: 'Muli', sans-serif; 
+    text-align: right; 
+    width: auto; 
+    display: table-cell; 
+    vertical-align: middle;
+    padding: 0.5em;
+    text-align: left;
+}
+
+.view-string-data {
+    background-color: #fcfcfc;
+    border: 1px solid #cccccc;
+    font-size: 1em;
+    padding: 0.5em 0 0.5em 0.2em;
+    width: 250px;    
+}
+
+.view-text-data {
+    width: 250px;
+    height: 150px;
+    font-family: monospace;  
+    background: #FCFCFC;
+}
+
+.view-form-header {
+    font-family: 'Muli', sans-serif;
+    font-size: 24px;
+    text-align: left;
+    margin-bottom: 15px;
+    width: 100%;
+    font-weight: normal;
+}
+
+.view-form-footer {
+    font-family: 'Muli', sans-serif;
+    width: 100%;
+    font-weight: normal; 
+    padding: 0;
+    border: 1px solid #AFAFAF;
+    display: table-row;
+}
+
+.footer-caption {
+    font-family: 'Muli', sans-serif; 
+    text-align: right; 
+    width: auto; 
+    display: table-cell; 
+    vertical-align: middle;
+    padding: 0.5em;
+    background: #E0E0E0;
+}
+
+.footer-data {
+    font-family: 'Muli', sans-serif; 
+    text-align: left; 
+    width: auto; 
+    display: table-cell; 
+    vertical-align: middle;
+    padding: 0.5em;
+    background: #E0E0E0;
+}
+

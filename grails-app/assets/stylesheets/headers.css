@@ -1,0 +1,116 @@
+/* 
+    Created on : Jan 31, 2016, 4:00:41 PM
+    Author     : Nikolay Krasnikov
+*/
+
+/*******************************************************************************
+ *  Styles for Admin Interface
+ ******************************************************************************/
+.top-header {
+    width: 100%; 
+    background: #fff; 
+    margin-top: 4px; 
+    border-bottom: 1px solid #36454F; 
+    height: 40px; 
+    display: table; 
+    vertical-align: middle; 
+    overflow: hidden; 
+    color: #555;
+}
+.top-header-cell-left {
+    font-family: 'Muli', sans-serif; 
+    font-size: 12px; 
+    width: 3%; 
+    display: table-cell; 
+    height: 40px; 
+    vertical-align: middle; 
+    color: #555;
+}
+.top-header-cell-middle {
+    font-family: 'Muli', sans-serif; 
+    font-size: 16px; margin-left: 0; 
+    width: auto; display: table-cell; 
+    height: 40px; 
+    vertical-align: middle; 
+    color: #555;
+}
+.top-header-cell-right {
+    font-family: 'Muli', sans-serif; 
+    text-align: right; 
+    color: #555; 
+    padding-right: 8px; 
+    width: auto; 
+    display: table-cell; 
+    height: 40px; 
+    vertical-align: middle;
+}
+
+/*******************************************************************************
+ *  Styles for logging in
+ ******************************************************************************/
+
+.login-header {
+    width: 100%; 
+    top: 2px; 
+    padding:5px 0; 
+    display: inline-block; 
+    overflow: hidden; 
+    text-align: center; 
+    background: #fff;
+    border-bottom: 1px solid #218C8D;
+}
+.lang-selector {display: block; float: right; border: 1px solid #fff;}
+.lang-selector:hover {border: 1px solid #5f9f9f; cursor: pointer;}
+
+.login-form {
+    width: 700px; 
+    margin-top: 50px; 
+    padding: 20px 10px; 
+    padding-left: 50px; 
+    background: #526C85; 
+    vertical-align: middle; 
+    text-align: left;
+    font-family: 'Muli', sans-serif;
+    font-size: 16px;
+    color: #FFF;
+}
+label {width: 200px; display: inline-block; text-align: left; outline: #333333;}
+
+.text-input {
+    width: 450px; 
+    padding: 0.2em 0.4em;
+    margin-bottom: 10px;
+    font-family: 'Muli', sans-serif;
+    font-size: 16px;
+}
+
+
+.login-title-box {
+    width: 100%; 
+    height: auto; 
+    margin-top: 20px; 
+    background: #FFF; 
+    display: inline-block; 
+    vertical-align: middle;
+    text-align: center;
+}
+.login-title {
+    font-family: 'Muli', sans-serif; 
+    font-size: 46px; 
+    color: #218C8D; 
+    font-weight: normal;
+    /*margin-left: 10px;*/
+}
+.log-out-link {
+    font-family: 'Muli', sans-serif;
+    font-size: 16px;
+    margin-top: 10px;
+    display: block;
+    color: #EFEFEF;
+    text-decoration: none;
+}
+.log-out-link:hover {
+    text-decoration: underline;
+    color: #FFF;
+}
+

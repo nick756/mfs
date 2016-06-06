@@ -1,0 +1,105 @@
+/* 
+    Created on : Feb 21, 2016, 10:29:52 AM
+    Author     : Nikolay Krasnikov
+*/
+
+.form-header {
+    font-family: 'Muli', sans-serif;
+    font-size: 24px;
+    text-align: left;
+    margin-bottom: 5px;
+    color: #36454F;
+    font-weight: normal;
+}
+
+/**
+ *  Main Content Table
+ */
+table.main-content {
+    width: 100%;
+    font-family: 'Muli', sans-serif;
+    font-size: 10pt;
+    color: #36454f;
+    margin-bottom: 1em;
+    border-collapse: separate;
+}
+
+table.main-content caption {
+    font-family: 'Muli', sans-serif;
+    font-size: 24px;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
+.separated {
+    border-collapse: separate;
+}
+
+table.main-content th {
+    line-height: 1.5em;
+    padding: 0.5em 0.6em;
+    vertical-align: middle;
+    text-align: center;
+    background: #536878;
+    /*color: #d0e8f4;*/
+    color: #fff;
+    border: 0.5px solid #fff;
+}
+
+table.main-content th.sortable a {
+	background-position: right;
+	background-repeat: no-repeat;
+	padding-right: 1.1em;
+}
+
+table.main-content tr.even {
+    background: #EFEFEF;
+}
+
+table.main-content tr.odd {
+    background: #FFF;
+}
+
+table.main-content th.asc a {
+	background-position: right;
+	background-repeat: no-repeat;    
+	background-image: url(../images/skin/sorted_asc.gif);
+}
+
+table.main-content th.desc a {
+	background-position: right;
+	background-repeat: no-repeat;    
+	background-image: url(../images/skin/sorted_desc.gif);
+}
+
+table.main-content td {
+    text-align: left;
+    padding: 0.5em;
+    vertical-align: middle;
+}
+
+table.main-content td.empty-list {
+    text-align: center;
+    padding: 0.5em;
+    color: #ffa500;
+    font-size: 14pt;
+    border: none;
+    border-bottom: 1px solid #536878;
+}
+
+table.main-content td.lefted {
+    text-align: left;
+}
+
+table.main-content td.righted {
+    text-align: right;
+}
+
+table.main-content td.centered {
+    text-align: center;
+}
+
+table.main-content td.bolded {
+    font-weight: bold;
+}
+

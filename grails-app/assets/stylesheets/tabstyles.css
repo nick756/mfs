@@ -1,0 +1,100 @@
+div.tabs-container {
+    width: 100%;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    margin-top: 4px;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #536878;
+    overflow: hidden;
+    height: auto;
+}
+
+ul.tabs-sec {
+    list-style-type: none;
+    margin-bottom: 0;
+    margin-top: 1px;
+    margin-right: 0;
+    padding: 0;
+}
+
+ul.tabs-sec li.unselected-item {
+    padding: 6px 20px 6px 20px;
+    float: left;
+    background-color: transparent;/*#b2ced2;*/
+    font-family: 'Muli', sans-serif;
+    font-size: 16px;
+    display: block;
+    margin: 0 5px 0 0;
+/*    color: #a0a0a0;*/
+    color: #668099;
+    border: 1px solid #536878;
+/*    border: 1px solid #b0b0b0;*/
+    border-bottom: none;
+    transition: all 1s;
+    /*
+    -webkit-border-top-left-radius: 4px;
+    -webkit-border-top-right-radius: 4px;
+    -moz-border-radius-topleft: 4px;
+    -moz-border-radius-topright: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    */
+    cursor: pointer;
+}
+
+ul.tabs-sec li.unselected-item:hover {
+    cursor: pointer;
+/*    border: 1px solid #668099;*/
+    border: 1px solid deepskyblue;
+    border-bottom: 0px solid #526c85;
+    /*background-color: #6285C7;*/
+/*    background-color: #D0E8F4;*/
+    background-color: deepskyblue;
+    font-family: 'Muli', sans-serif;
+    color: #fff;
+    padding: 6px 20px 6px 20px;
+    font-size: 16px;
+    transition: all 0.5s;
+}
+
+ul.tabs-sec li.unselected-item a {
+    text-decoration: none;
+    font-family: 'Muli', sans-serif;
+    color: #536878;
+    transition: all 0.5s;
+}
+
+ul.tabs-sec li.unselected-item a:hover {
+    color: #fff;
+    transition: all 0.5s;
+}
+
+ul.tabs-sec li.unselected-item a:active {
+    position: relative;
+    top: 2px;
+}
+
+ul.tabs-sec li.selected-item {
+    padding: 6px 20px 6px 20px;
+    float: left;
+    background-color: #536878;
+/*    background-color: #6285C7;*/
+    display: block;
+    margin: 0 5px 0 0;
+    border: 1px solid #536878;
+    border-bottom: none;
+    color: #fff;
+    font-size: 16px;
+    font-family: 'Muli', sans-serif;
+    font-weight: normal;
+    /*
+    -webkit-border-top-left-radius: 4px;
+    -webkit-border-top-right-radius: 4px;
+    -moz-border-radius-topleft: 4px;
+    -moz-border-radius-topright: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    */
+}
+
