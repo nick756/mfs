@@ -7,7 +7,7 @@
                 <g:each in="${viewForm.tabs}" var="tab" status="i">
                     <li class="${tab.value[1]}">
                         <g:if test="${tab.value[0]}"><g:message code="${tab.value[2]}"/></g:if>
-                        <g:else><g:link  controller="${tab.value[3]}" action="${tab.value[4]}" id="${objectInstance?.id}"><g:message code="${tab.value[2]}"/></g:link></g:else>
+                        <g:else><g:remoteLink  update="dialog" controller="${tab.value[3]}" action="${tab.value[4]}" id="${objectInstance?.id}"><g:message code="${tab.value[2]}"/></g:remoteLink></g:else>
                     </li>
                 </g:each>
             </ul>

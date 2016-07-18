@@ -1,6 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="com.mfs.entities.*" %>
-
+<%--
+    Template for rendering generic Data Entry (/ Update (?)) Form for master instance
+    of an object (not associated). Template DOES NOT render 'hasMany' fields.
+--%>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -8,22 +11,22 @@
     </head>
     <body>
         <h1 class="form-header"><g:message code="${formData.caption}"/></h1>
-            <g:hasErrors bean="${objectInstance}">
+        <g:hasErrors bean="${objectInstance}">
             <div class="errors">
-            <ul>
-                <g:eachError bean="${objectInstance}" var="error">
-                <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-                </g:eachError>
-            </ul>
+                <ul>
+                    <g:eachError bean="${objectInstance}" var="error">
+                        <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+                    </g:eachError>
+                </ul>
             </div>
-            </g:hasErrors>        
-        <div class="form-holder">
-            <g:set var="objectName" value="${formData.object}"/>
-            <g:form name="${formData.name}" controller="${formData.target[0]}" action="${formData.target[1]}">
+        </g:hasErrors>        
+        <g:set var="objectName" value="${formData.object}"/>
+        <g:form name="${formData.name}">
+            <div class="form-holder">
                 <g:each in="${formData.fields}" var="field" status="i">
                     <div class="form-row">
                         <g:if test="${field.value[0] == true}">
-                            <div class="cell-caption red"><%--g:message code="${field.value[2]}" /--%><g:message code="${objectName.toLowerCase()}.${field.key}.label"/></div>
+                            <div class="cell-caption red"><g:message code="${objectName.toLowerCase()}.${field.key}.label"/></div>
                         </g:if>
                         <g:else>
                             <div class="cell-caption"><g:message code="${objectName.toLowerCase()}.${field.key}.label"/></div>
@@ -37,8 +40,9 @@
                         </div>
                     </div>
                 </g:each>
-                </div>
-                <input type="submit" value="<g:message code='actions.submit.label'/>" class="myButton dark" />
-            </g:form>
+            </div>
+            <%-- Tag 'formRemote' is deprecated in Grails 2.5: not functioning; replaced by below construct --%>
+            <g:submitToRemote url="${['controller': formData.target[0], 'action': formData.target[1]]}" update="dialog" value="${message(code: 'actions.submit.label')}" class="myButton dark"/>
+        </g:form>
     </body>
 </html>

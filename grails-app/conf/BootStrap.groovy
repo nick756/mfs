@@ -75,6 +75,17 @@ class BootStrap {
             println "... total instances created: ${State.list().size()}"
         }
         
+        if(MembershipType.list().size() == 0) {
+            println ''
+            println 'Generating instance of MembershipType...'
+            
+            new MembershipType(code: 10, value_EN: 'Benefit', value_MY: 'Manfaat').save(flush: true)
+            new MembershipType(code: 20, value_EN: 'Loan', value_MY: 'Pinjaman').save(flush: true)
+            new MembershipType(code: 30, value_EN: 'Associate Member', value_MY: 'Ahli Bersekutu').save(flush: true)
+            
+            println "... total instances created: ${MembershipType.list().size()}"
+        }
+        
         if(Organization.list().size() == 0) {
             def org = new Organization(
                 code: 1,

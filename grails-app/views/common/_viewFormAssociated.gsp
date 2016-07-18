@@ -19,10 +19,6 @@
         Map Keys.
 --%>
 
-<%-- Rendering Horizontal Actions Panel, if applicable  --%>
-<g:if test="${viewForm?.addMenu}">
-    
-</g:if>
 <h1 class="${viewForm.styles.header}">${parentInstance[viewForm.headerField]}</h1>
 <div class="${viewForm.styles.main[0]}">
     <%-- Analyzing whether the Form is tabbed or not, displaying Tabs if required --%>
@@ -32,15 +28,27 @@
                 <g:each in="${viewForm.tabs}" var="tab" status="i">
                     <li class="${tab.value[1]}">
                         <g:if test="${tab.value[0]}"><g:message code="${tab.value[2]}"/></g:if>
-                        <g:else><g:link  controller="${tab.value[3]}" action="${tab.value[4]}" id="${parentInstance?.id}"><g:message code="${tab.value[2]}"/></g:link></g:else>
+                        <g:else><g:remoteLink  update="dialog" controller="${tab.value[3]}" action="${tab.value[4]}" id="${parentInstance?.id}"><g:message code="${tab.value[2]}"/></g:remoteLink></g:else>
                     </li>
                 </g:each>
             </ul>
         </div>
     </g:if>
-    <%-- Rendering Tabular Section, if any defined: Details View is rendered for a 
+    <%-- Rendering Horizontal Actions Panel, if applicable  --%>
+    <g:if test="${viewForm?.addMenu}">
+        <div class="form-action-panel">
+            <%--g:link><img class="action-image" src="${resource(dir: 'images', file: 'arrow_left.png')}"></g:link--%>
+            <g:each in="${viewForm?.actionsPane}" var="actionItem" status="k">
+                <g:link controller="${actionItem.value[2]}" action="${actionItem.value[3]}" id="${parentInstance?.id}">
+                    <img class="action-image" style="float: ${actionItem.value[0]}" src="${resource(dir: 'images', file: actionItem.value[1])}"/>
+                </g:link>
+            </g:each>
+        </div>
+    </g:if>
+    <%-- 
+        Rendering Tabular Section, if any defined: Details View is rendered for a 
          selected Record (currentInstance?.id) 
-    --%>
+    --%>    
     <g:if test="${viewForm.tabular}">
         <table class="${viewForm.styles.table[0]}">
             <th>No</th>

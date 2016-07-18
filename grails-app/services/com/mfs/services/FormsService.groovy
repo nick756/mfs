@@ -45,6 +45,7 @@ class FormsService {
             object:   'Member',
             fields:  [
                 branch:             [true, 'subset', 'com.mfs.entities.Branch'],
+                type:               [true, 'select', 'com.mfs.entities.MembershipType'],
                 registrationDate:   [true, 'date', -2],
                 name:               [true, 'string'],
                 birthDate:          [true, 'date', -50],
@@ -68,6 +69,42 @@ class FormsService {
         ]
     ]
     
+    /**
+     *  Forms definitions for direct update of Object instance (not associated).
+     *  Forms are Ajax enabled, generated in pop up window.
+     */
+    final private updateDirectForms = [
+        pendingProcess: [
+            name:           'updatestatus',
+            caption:        'forms.statusUpdate.label',
+            target:         ['home', 'updatepending'],
+            object:         'Member',
+            headerField:    'name',
+            fields:     [
+                //                  ------------------------------------
+                //                  1       2          3       4
+                //                  edit    mandatory  type    extra data
+                //                  ------------------------------------
+                name:               [false, false, 'string'],
+                branch:             [false, false, 'string'],
+                type:               [false, false, 'string'],
+                registrationDate:   [false, false, 'date'],
+                city:               [false, false, 'string'],
+                state:              [false, false, 'string'],
+                approvalDate:       [true, false, 'date', -2],
+                approvalAuthority:  [true, true, 'string'],
+                remarksApproval:    [true, false, 'text'],
+                rejectionDate:      [true, false, 'date', -2],
+                remarksRejection:   [true, false, 'text']
+            ]
+        ]
+    ]
+    
+    /**
+     *  Controllers processing search requests must be attributes aware, as per
+     *  specific Search Options - attributes are keys if panel maps panelLeft
+     *  and panelRight
+     */
     final private searchForms = [
         searchActiveMember: [
             name:         'searchmember',
@@ -81,8 +118,8 @@ class FormsService {
             fields:   [
                 paneLeft: [
                     searchName:     ['string', 'search-cell', 'data-entry', 'member.name.label'],
-                    searchIcNumber:     ['string', 'search-cell', 'data-entry', 'member.icNumber.label'],
-                    searchState:        ['select', 'search-cell', 'data-entry', 'member.state.label', 'com.mfs.entities.State']                    
+                    searchIcNumber: ['string', 'search-cell', 'data-entry', 'member.icNumber.label'],
+                    searchState:    ['select', 'search-cell', 'data-entry', 'member.state.label', 'com.mfs.entities.State']                    
                 ],
                 paneRight: [
                     searchBranch:   ['subset', 'search-cell', 'data-entry', 'member.branch.label'],
@@ -183,7 +220,7 @@ class FormsService {
                     searchDateTill: ['date', 'search-cell', 'data-entry', 'member.registrationDate.till.label', -10]
                 ]
             ]
-        ],        
+        ]        
     ]
     
     final private tabularViews = [
@@ -195,7 +232,7 @@ class FormsService {
             colspan:      6,
             emptyMessage: ['empty-list', 'messages.emptyList.label'],
             actions: [    //  With ID of current instance
-                details:  ['icons/edit_small.png', 'actions.icon.details.label', 'controller', 'action', '']
+                details:  [false, 'icons/edit_small.png', 'actions.icon.details.label', 'controller', 'action', '']
             ],
             toolTip:  [   //  Applied to each instance, first column
                 ['member.name.label', 'name'],
@@ -220,9 +257,11 @@ class FormsService {
             colspan:      6,  //  Must include line number, if set to true
             emptyMessage: ['empty-list', 'messages.emptyList.label'],
             actions: [    //  With ID of current instance
-                details:    ['icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name'],
-                update:     ['icons/edit_small.png', 'icons/edit_small_over.png', 'actions.icon.edit.label', 'home', 'updatemember', 'name'],
-                process:    ['icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.label', 'home', 'processpending', 'name']
+                //          0           1               2           3               4           5           6                   7           8           9     10
+                //          ajax flag, image_normal, image_hover, general title, controller, action name, attribute for title, ajax name,   form title width height
+                details:    [true, 'icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name', 'view_profile', 'forms.member.profile.label', 1200, 600],
+                update:     [false, 'icons/edit_small.png', 'icons/edit_small_over.png', 'actions.icon.edit.label', 'home', 'updatemember', 'name'],
+                process:    [true, 'icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.label', 'home', 'processpending', 'name', 'view_profile', 'forms.member.approve.label', 800, 500]
             ],
             toolTip:  [   //  Applied to each instance, first column
                 ['member.name.label', 'name'],
@@ -246,9 +285,9 @@ class FormsService {
             colspan:      6,  //  Must include line number, if set to true
             emptyMessage: ['empty-list', 'messages.emptyList.label'],
             actions: [    //  With ID of current instance
-                details:    ['icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name'],
-                update:     ['icons/edit_small.png', 'icons/edit_small_over.png', 'actions.icon.edit.label', 'home', 'updatemember', 'name'],
-                process:    ['icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.label', 'home', 'processrejected', 'name']
+                details:    [false, 'icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name'],
+                update:     [false, 'icons/edit_small.png', 'icons/edit_small_over.png', 'actions.icon.edit.label', 'home', 'updatemember', 'name'],
+                process:    [false, 'icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.label', 'home', 'processrejected', 'name']
             ],
             toolTip:  [   //  Applied to each instance, first column
                 ['member.name.label', 'name'],
@@ -272,9 +311,9 @@ class FormsService {
             colspan:      6,  //  Must include line number, if set to true
             emptyMessage: ['empty-list', 'messages.emptyList.label'],
             actions: [    //  With ID of current instance
-                details:    ['icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name'],
-                update:     ['icons/edit_small.png', 'icons/edit_small_over.png', 'actions.icon.edit.label', 'home', 'updatemember', 'name'],
-                process:    ['icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process', 'home', 'processretired', 'name']
+                details:    [false, 'icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name'],
+                update:     [false, 'icons/edit_small.png', 'icons/edit_small_over.png', 'actions.icon.edit.label', 'home', 'updatemember', 'name'],
+                process:    [false, 'icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process', 'home', 'processretired', 'name']
             ],
             toolTip:  [   //  Applied to each instance, first column
                 ['member.name.label', 'name'],
@@ -298,8 +337,8 @@ class FormsService {
             colspan:      7,  //  Must include line number, if set to true
             emptyMessage: ['empty-list', 'messages.emptyList.label'],
             actions: [    //  With ID of current instance
-                details:    ['icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name'],
-                process:    ['icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.shares.label', 'home', 'processshares', 'name']
+                details:    [true, 'icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name', 'view_profile', 'forms.member.profile.label', 1200, 600],
+                process:    [false, 'icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.shares.label', 'home', 'processshares', 'name']
             ],
             toolTip:  [   //  Applied to each instance, first column
                 ['member.name.label', 'name'],
@@ -352,6 +391,7 @@ class FormsService {
             ],
             fields: [
                 branch:             ['string', 'view-string-data', 'member.branch.label'],
+                type:               ['string', 'view-string-data', 'member.type.label'],
                 status:             ['string', 'view-string-data', 'member.status.label'],
                 registrationDate:   ['date', 'view-string-data', 'member.registrationDate.label', 'dd/MM/yyyy'],
                 approvalDate:       ['date', 'view-string-data', 'member.approvalDate.label', 'dd/MM/yyyy'],
@@ -457,7 +497,7 @@ class FormsService {
                 
             ],
             actionsPane:        [
-                button1:    ['right', 'home', 'addassociate', 'actions.icon.add.associate.label']
+                button1:    ['right', 'data_add.png', 'home', 'addassociate', 'actions.icon.add.associate.label']
             ],
             tableFields:        [
                 name:       ['string', 'lefted', 40],

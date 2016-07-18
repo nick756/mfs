@@ -1,0 +1,14 @@
+/* 
+    Created on : Jun 6, 2016, 1:42:01 PM
+    Author     : Nikolay Krasnikov
+*/
+div.form-action-panel {
+    width: 100%;
+    padding: 0.3em;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    display: block;
+    background-color: #DEDEDE;
+    min-height: 32px;
+    overflow: hidden;
+}

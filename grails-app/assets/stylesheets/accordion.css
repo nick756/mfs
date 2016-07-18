@@ -251,6 +251,7 @@ http://rockablethemes.com
     text-decoration: none;
     width: 99%;
     display: block;
+    outline: none;
 }
 
 .line-item a.current {

@@ -12,8 +12,9 @@ class Member {
     Date rejectionDate
     Date retirementDate
     
-    Organization organization
-    MemberStatus status
+    Organization    organization
+    MemberStatus    status
+    MembershipType  type
     
     String name
     String icNumber
@@ -24,6 +25,11 @@ class Member {
     String address
     String city
     State state
+    
+    String approvalAuthority
+    String remarksGeneral
+    String remarksApproval
+    String remarksRejection
     
     String operatorEntry
     String operatorUpdate
@@ -62,11 +68,17 @@ class Member {
         rejectedBy      nullable: true
         employment      nullable: true
         maritalStatus   nullable: true
+        type            nullable: false
         
         approvalDate        nullable: true
         registrationDate    nullable: false
         rejectionDate       nullable: true
         retirementDate      nullable: true
+        
+        approvalAuthority   nullable: true
+        remarksGeneral      maxSize: 10240, nullable: true
+        remarksApproval     maxSize: 10240, nullable: true
+        remarksRejection    maxSize: 10240, nullable: true
     }
     
     public String toString() {

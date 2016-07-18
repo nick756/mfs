@@ -11,26 +11,15 @@
         <title>MFS</title>
     <asset:stylesheet src="application.css"/>
     <asset:javascript src="application.js"/>    
+    <asset:javascript src="orghome.js"/>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <link href='http://fonts.googleapis.com/css?family=Poiret+One|Muli|Economica|Quicksand|Jura|Orbitron' rel='stylesheet' type='text/css'>
     <g:layoutHead/>
     <r:layoutResources />    
     <% 
         mask = new AccessMask() 
     %>
-    
-<g:javascript>
-  $(document).ready(function($) {
-    $('#accordion').find('.accordion-toggle').click(function(){
 
-      //Expand or collapse this panel
-      $(this).next().slideToggle('fast');
-
-      //Hide the other panels
-      $(".accordion-content").not($(this).next()).slideUp('fast');
-
-    });
-  });
-</g:javascript>    
 </head>
 <body>
 <center>

@@ -1,0 +1,46 @@
+/*
+ *  Pagination class to be applied to DIV Tag ebracing <g:paginate>
+ */
+.pagination {
+	border-top: 0;
+	margin: 0;
+	padding: 0.3em 0.2em;
+	text-align: center;
+        /*
+	   -moz-box-shadow: 0 0 3px 1px #AAAAAA;
+	-webkit-box-shadow: 0 0 3px 1px #AAAAAA;
+	        box-shadow: 0 0 3px 1px #AAAAAA;
+                */
+	background-color: #536878;
+}
+
+.pagination a,
+.pagination .currentStep {
+	color: #fff;
+	display: inline-block;
+	margin: 0 0.1em;
+	padding: 0.25em 0.7em;
+	text-decoration: none;
+        /*
+	   -moz-border-radius: 0.3em;
+	-webkit-border-radius: 0.3em;
+	        border-radius: 0.3em;
+                */
+        transition: all 0.5s;
+}
+
+.pagination a:hover, .pagination a:focus {
+	background-color: #FFA500;
+	color: #ffffff;
+	outline: none;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+        transition: all 0.5s;
+}
+
+.pagination .currentStep {
+	background-color: #20B2AA;
+	color: #ffffff;
+	outline: none;
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+        transition: all 0.5s;    
+}

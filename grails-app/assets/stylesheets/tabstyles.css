@@ -62,6 +62,7 @@ ul.tabs-sec li.unselected-item a {
     text-decoration: none;
     font-family: 'Muli', sans-serif;
     color: #536878;
+    outline: none;
     transition: all 0.5s;
 }
 

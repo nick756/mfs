@@ -9,8 +9,10 @@
 *
 #= require main
 *= require menus
+*= require pagination
 *= require viewforms
 *= require tabstyles
+*= require actioinpanel
 *= require commoncontent
 *= require forms
 *= require headers

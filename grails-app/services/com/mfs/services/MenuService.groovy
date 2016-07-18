@@ -15,25 +15,25 @@ class MenuService {
             'fragment': '01',
             'caption':  'menus.membership.label',
             'items': [
-                'new':      ['newmember', 'menus.membership.add.label'],
-                'active':   ['index', 'menus.membership.active.label'],
-                'pending':  ['pending', 'menus.membership.pending.label'],
-                'retired':  ['retired', 'menus.membership.retired.label'],
-                'rejected': ['rejected', 'menus.membership.rejected.label'],
-                'shares':   ['shares', 'menus.membership.shares.label']
+                'new':      [true, 'newmember', 'menus.membership.add.label', 800, 620],
+                'active':   [false, 'index', 'menus.membership.active.label', 0, 0],
+                'pending':  [false, 'pending', 'menus.membership.pending.label', 0, 0],
+                'retired':  [false, 'retired', 'menus.membership.retired.label', 0, 0],
+                'rejected': [false, 'rejected', 'menus.membership.rejected.label', 0, 0],
+                'shares':   [false, 'shares', 'menus.membership.shares.label', 0, 0]
             ]
         ],
         'financing': [  //  Managing Loan Records
             'fragment': '02',
             'caption':  'menus.financing.label',
             'items': [
-                'new':          ['new', 'menus.financing.add.label'],
-                'active':       ['index', 'menus.financing.active.label'],
-                'pending':      ['pending', 'menus.financing.pending.label'],
-                'rejected':     ['rejected', 'menus.financing.rejected.label'],
-                'redemption':   ['redemption', 'menus.financing.redemption.label'],
-                'settled':      ['settled', 'menus.financing.settled.label'],
-                'delinquent':   ['delinquency', 'menus.financing.delinquency.label']
+                'new':          [false, 'new', 'menus.financing.add.label', 0, 0],
+                'active':       [false, 'index', 'menus.financing.active.label', 0, 0],
+                'pending':      [false, 'pending', 'menus.financing.pending.label', 0, 0],
+                'rejected':     [false, 'rejected', 'menus.financing.rejected.label', 0, 0],
+                'redemption':   [false, 'redemption', 'menus.financing.redemption.label', 0, 0],
+                'settled':      [false, 'settled', 'menus.financing.settled.label', 0, 0],
+                'delinquent':   [false, 'delinquency', 'menus.financing.delinquency.label', 0, 0]
             ]
         ]
     ]
@@ -60,9 +60,13 @@ class MenuService {
 
         sideMenu.items.each {key, value ->
             item.lines << new MenuLine(
-                caption: value[1],
-                actName: value[0],
-                active:  value[0] != actName? true:false
+                ajax:       value[0],
+                caption:    value[2],
+                contName:   sourceName,
+                actName:    value[1],
+                active:     value[1] != actName? true:false,
+                width:      value[3],
+                height:     value[4]
             )
         }
 

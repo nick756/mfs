@@ -26,6 +26,9 @@ class HomeController {
             return
         }
         
+        params.offset = params.offset ?: 0
+        params.max = params.max ?: 3         
+        
         //  session.preserveMemberPaging
         //  session.memberPaging::PagingData
         //  session.memberSearchActive
@@ -120,6 +123,7 @@ class HomeController {
         
         render view: 'list', model: [
             instancesList:  membersList,
+            counter:        membersList.totalCount,
             menuList:       menuService.generateSideMenu('home', 'index'),
             searchForm:     formsService.getSearchForm('searchActiveMember'),
             fragment:       '01',
@@ -140,7 +144,8 @@ class HomeController {
         println ''
         println "${new Date()} Location: ${controllerName}/${actionName}"
         
-        render view: '/common/show', model: [
+        //render view: '/common/show', model: [
+        render template: '/common/viewForm', model: [
             objectInstance: objectInstance,
             menuList: menuService.generateSideMenu('home', actionActive),
             //searchForm: formsService.getSearchForm('searchActiveMember'),
@@ -154,21 +159,21 @@ class HomeController {
         def target = params?.target
         
         switch(target) {
-            case 'index': 
-                session.memberSearchActive = null
-                break
-            case 'pending':
-                session.memberSearchData = null
-                break
-            case 'retired':
-                session.memberSearchRetired = null
-                break
-            case 'rejected':
-                session.memberSearchRejected = null
-                break
-            case 'shares':
-                session.memberSearchShares = null
-                break
+        case 'index': 
+            session.memberSearchActive = null
+            break
+        case 'pending':
+            session.memberSearchData = null
+            break
+        case 'retired':
+            session.memberSearchRetired = null
+            break
+        case 'rejected':
+            session.memberSearchRejected = null
+            break
+        case 'shares':
+            session.memberSearchShares = null
+            break
         }
         
         redirect action: "${target}"
@@ -179,6 +184,17 @@ class HomeController {
             redirect controller: 'login'
             return
         }
+        
+        if(params.offsetReset) {
+            session.offsetHomePending = params.offset
+        }
+        
+        if(session?.offsetHomePending) {
+            params.offset = session.offsetHomePending ?: 0
+        }
+        
+        params.max = params.max ?: 3
+        params.offset = params.offset ?: 0  
         
         Organization org = Organization.get(session?.organization?.id)
         Branch branch = Branch.get(session?.branch?.id) 
@@ -261,6 +277,7 @@ class HomeController {
         
         render view: 'list', model: [
             instancesList:  membersList,
+            counter:        membersList.totalCount,
             menuList:       menuService.generateSideMenu('home', 'pending'),
             searchForm:     formsService.getSearchForm('searchPendingMember'),
             fragment:       '01',
@@ -289,7 +306,8 @@ class HomeController {
         
         //subsetData['branch'] = branchList
         
-        render view: 'newinstance', model: [
+        render template: '/common/genericForm', model: [
+            //render view: 'newinstance', model: [
             formData: formsService.getEntryForm('memberentry'),
             menuList: menuService.generateSideMenu('home', 'newmember'),
             fragment: '01',
@@ -323,6 +341,9 @@ class HomeController {
             memberInstance = new Member(params)
         }
         catch(AssertionError e) {
+            println 'Method: savemember'
+            println params
+            
             //  Excluding all Dates
             params.registrationDate = null
             params.birthDate = null
@@ -337,7 +358,8 @@ class HomeController {
         
             memberInstance.validate()
             
-            render view: 'newinstance', model: [
+            render template: '/common/genericForm', model: [
+                //render view: 'newinstance', model: [
                 formData: formsService.getEntryForm('memberentry'),
                 menuList: menuService.generateSideMenu('home', 'newmember'),
                 fragment: '01',
@@ -362,7 +384,8 @@ class HomeController {
         memberInstance.operatorEntry    = session?.user?.name
         
         if(!memberInstance.validate()) {
-            render view: 'newinstance', model: [
+            render template: '/common/genericForm', model: [
+                //render view: 'newinstance', model: [
                 formData: formsService.getEntryForm('memberentry'),
                 menuList: menuService.generateSideMenu('home', 'newmember'),
                 fragment: '01',
@@ -377,7 +400,8 @@ class HomeController {
             memberInstance.save(flush: true)
         }
         
-        redirect action: 'pending'
+        //redirect action: 'pending'
+        render "Membership Record created: $memberInstance?.name"
     }
     
     /**
@@ -398,13 +422,18 @@ class HomeController {
             employmentData = Employment.get(employmentID)
         }
         
-        render view: '/common/showAssociated', model: [
-            menuList:           menuService.generateSideMenu('home', actionName),
-            fragment:           '01',
+        println "Action: employmentview ${new Date()}"
+        println "Parent: ${parentInstance?.name} employmentID: ${employmentID}"
+        println "Data found: ${employmentData}"
+        
+        //render view: '/common/showAssociated', model: [
+        render template: '/common/viewFormAssociated', model: [
+            //menuList:           menuService.generateSideMenu('home', actionName),
+            //fragment:           '01',
             viewForm:           formsService.getViewFormAssociated('employmentDetails'),
             parentInstance:     parentInstance,
             instancesList:      objectInstances,
-            currentInstance:    employmentData
+            currentInstance:     employmentData
         ]
     }
     
@@ -419,7 +448,8 @@ class HomeController {
         
         instancesList = parentInstance?.associates
         
-        render view: '/common/showAssociated', model: [
+        //render view: '/common/showAssociated', model: [
+        render template: '/common/viewFormAssociated', model: [
             menuList:           menuService.generateSideMenu('home', actionName),
             viewForm:           formsService.getViewFormAssociated('associatesDetails'),
             parentInstance:     parentInstance,
@@ -631,9 +661,24 @@ class HomeController {
             return
         }  
         
+        if(params.offsetReset) {
+            session.offsetHomeShares = params.offset
+        }
+        
+        if(session?.offsetHomeShares) {
+            params.offset = session.offsetHomeShares ?: 0
+        }
+        
+        params.max = params.max ?: 3
+        params.offset = params.offset ?: 0
+
         Organization org = Organization.get(session?.organization?.id)
         Branch branch = Branch.get(session?.branch?.id) 
         MemberStatus statusRejected = MemberStatus.findByCode(30)
+        
+        println 'Action: shares'
+        println "Paging Reset: ${params?.offsetReset}"
+        println "Offset: ${params.offset}"
         
         def subsetData = [:]
         
@@ -718,6 +763,7 @@ class HomeController {
         
         render view: 'list', model: [
             instancesList:  membersList,
+            counter:        membersList.totalCount,
             menuList:       menuService.generateSideMenu('home', 'shares'),
             searchForm:     formsService.getSearchForm('searchSharesMember'),
             fragment:       '01',
@@ -725,5 +771,10 @@ class HomeController {
             tabularView:    formsService.getTabularView('sharesMembers'),
             subsetData:     subsetData
         ]        
+    }
+    
+    def processpending(Member objectInstance) {
+        
+        render template: 'processpending', model: [objectInstance: objectInstance]
     }
 }

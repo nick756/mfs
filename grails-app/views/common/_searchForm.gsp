@@ -9,6 +9,7 @@
     <body>
         <g:form name="${searchForm.name}" controller="${searchForm.targetMain[0]}">
             <g:hiddenField name="target" value="${searchForm.targetMain[1]}"/>
+            <g:hiddenField name="offsetReset" value="${true}"/>
             <div class="${searchForm.cssClass[0]}">
                 <div class="left-search-pane">
                     <g:each in="${searchForm.fields.paneLeft}" var="field" status="index">
@@ -58,7 +59,7 @@
                             class="action-image" style="margin-right: 10px;"
                             title="${message(code: searchForm.buttons['search'][1])}" 
                             action="${searchForm.targetMain[1]}" 
-                            src="${resource(dir: 'images', file: searchForm.buttons['search'][0])}" />
+                            src="${resource(dir: 'images', file: searchForm.buttons['search'][0])}"/>
                     </div>
                     <div style="width: 48%; display: inline-block; vertical-align: top; float: right; margin-left: 2px;">
                         <g:actionSubmitImage class="action-image" style="margin-top: 0px;" value="${searchForm.buttons['reset'][1]}" title="${message(code: searchForm.buttons['reset'][1])}" action="${searchForm.targetReset[1]}" src="${resource(dir: 'images', file: searchForm.buttons['reset'][0])}" />

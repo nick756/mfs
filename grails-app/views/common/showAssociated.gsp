@@ -12,7 +12,7 @@
                 <g:render template="/common/sidemenu" model ="[menuList: menuList]"/>
             </div>
             <div class="col-10">
-                 <g:render template="/common/viewFormAssociated" model="[viewForm: viewForm, parentInstance: parentInstance, instancesList: instancesList, currentInstance: currentInstance]"/>
+                <g:render template="/common/viewFormAssociated" model="[viewForm: viewForm, parentInstance: parentInstance, instancesList: instancesList, currentInstance: currentInstance]"/>
             </div>
         </div>
     </body>
