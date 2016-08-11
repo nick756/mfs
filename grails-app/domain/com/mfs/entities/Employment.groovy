@@ -25,7 +25,7 @@ class Employment {
     
     static constraints = {
         employer        nullable: false
-        joinDate        nullable: false
+        joinDate        nullable: true
         retirementDate  nullable: true
         type            nullable: true
         sector          nullable: true

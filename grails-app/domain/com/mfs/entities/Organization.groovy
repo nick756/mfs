@@ -7,6 +7,16 @@ class Organization implements Serializable {
     String registrationNo
     Date incorporationDate
     
+    String address
+    String city
+    State  state
+    Integer postCode
+    String email
+    String contactNumber
+    String contactPerson
+    
+    MemberNumberGenerator numberGenerator
+    
     static hasMany = [
         branches: Branch
     ]
@@ -14,9 +24,19 @@ class Organization implements Serializable {
     static constraints = {
         branches nullable: true
         incorporationDate nullable: true
+        
+        address     nullable: true
+        city        nullable: true
+        state       nullable: true
+        postCode    nullable: true
+        email       nullable: true, email: true
+        
+        contactNumber   nullable: true
+        contactPerson   nullable: true
+        numberGenerator nullable: true
     }
     
     public String toString() {
-        "${String.format('%1$4s', this.code).replaceAll(' ', '0')} $name"
+        "${String.format('%1$4s', this.code).replaceAll(' ', '0')} ${name}"
     }
 }

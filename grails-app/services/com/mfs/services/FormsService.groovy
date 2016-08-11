@@ -1,7 +1,7 @@
 package com.mfs.services
 
 import grails.transaction.Transactional
-import grails.mfs.entities.*
+import com.mfs.entities.*
 
 /**
  *  <h1>Dynamic Forms Service</h1>
@@ -57,27 +57,156 @@ class FormsService {
                 city:               [true, 'string'],
                 state:              [false, 'select', 'com.mfs.entities.State']
             ]
-        ],
-        employmentdetails: [  //  Entering Employment Details (Second Step)
-            name:     'employment',
-            caption:  'forms.epmloyment.label',
-            target:   ['home', 'saveemployment'],
-            object:   'Employment',
-            fields:   [
-                
+        ]
+    ]
+    
+    /**
+     *  Data Entry forms for multiple Associated Enttities, such as Associates 
+     *  and others. To be displayed in pop up Window with pre-prepared instance,
+     *  must maintain back link for canceling operation.
+     *  
+     *   Default classes will be applied to rendered Form, relative to main class
+     *   provided.
+     */
+    final private entryAssociated = [
+        newAssociate: [
+            name:       'newAssociate',
+            object:     'Associate',
+            parent:     'Member',
+            caption:    'forms.member.add.associate.label', // Content of Window Header
+            titleField: 'name',                             //  Attribute of 'parent'
+            target:     ['home', 'saveassociate'],          //  Controller, action
+            cssClass:   'entry-form',
+            fields: [
+                name:           [true, 'string'],
+                birthDate:      [true, 'date', -50],
+                gender:         [true, 'select', 'com.mfs.entities.Gender'],
+                relationship:   [true, 'select', 'com.mfs.entities.Relationship'],
+                guarantor:      [true, 'boolean'],
+                icNumber:       [true, 'string'],
+                employer:       [true, 'string'],
+                position:       [false, 'string'],
+                address:        [true, 'text'],
+                city:           [true, 'string'],
+                postCode:       [true, 'integer', 5]
             ]
+        ],
+        updateEmployment: [
+            name:       'updateEmpoyment',
+            object:     'Employment',
+            parent:     'Member',
+            caption:    'forms.member.employment.label',    // Content of Window Header
+            titleField: 'name',                             //  Attribute of 'parent'
+            target:     ['home', 'updateEmployment'],       //  Controller, action
+            cssClass:   'entry-form',
+            fields: [
+                employer:       [true, 'string'],
+                joinDate:       [true, 'date', -50],
+                sector:         [true, 'select', 'com.mfs.entities.EmploymentSector'],
+                type:           [true, 'select', 'com.mfs.entities.EmploymentType'],
+                position:       [false, 'string'],
+                basicSalary:    [true, 'string'],
+                allowance:      [true, 'string'],
+                address:        [false, 'text'],
+                city:           [true, 'string'],
+                postCode:       [false, 'integer', 5],
+                contactNumber:  [false, 'string'],
+                email:          [false, 'string']
+            ]            
         ]
     ]
     
     /**
      *  Forms definitions for direct update of Object instance (not associated).
-     *  Forms are Ajax enabled, generated in pop up window.
+     *  Forms are Ajax enabled, generated in pop up window. All links must be
+     *  rendered as Remote Links.
+     *  
+     *  Must be supplied:
+     *  -   formData        ~ element of this Map
+     *  -   objectInstance  ~ master object
+     *  -   subsetData      ~ Map with attributes as keys
+     *  -   winWidth
+     *  -   winHeight
      */
     final private updateDirectForms = [
+        editMember: [
+            name:           'editmember',
+            object:         'Member',            
+            caption:        'forms.member.edit.biodata.label',   //  Window's Title
+            headerField:    'name',                     //  Content Caption
+            target:         ['home', 'updatemember'],
+            source:         ['home', 'viewmember', 'arrow_left.png', 'left'],   
+            trigger:        false,
+            triggerAction:  [],
+            fields: [
+                number:             [false, false, 'integer', 6],
+                branch:             [true, true, 'subset', 'com.mfs.entities.Branch'],
+                type:               [true, true, 'select', 'com.mfs.entities.MembershipType'],
+                registrationDate:   [true, true, 'date', -2],
+                name:               [true, true, 'string'],
+                birthDate:          [true, true, 'date', -50],
+                icNumber:           [true, true, 'string'],
+                gender:             [true, true, 'select', 'com.mfs.entities.Gender'],
+                religion:           [true, false, 'select', 'com.mfs.entities.Religion'],
+                maritalStatus:      [true, true, 'select', 'com.mfs.entities.MaritalStatus'],
+                address:            [true, false, 'text'],
+                city:               [true, true, 'string'],
+                state:              [true, false, 'select', 'com.mfs.entities.State']                
+            ]
+        ],
+        
+        retirement: [
+            name:           'retirement',
+            object:         'Member',            
+            caption:        'forms.member.retirement.label',   //  Window's Title
+            headerField:    'name',                     //  Content Caption
+            target:         ['membership', 'processRetirement'],
+            source:         [],     
+            trigger:        false,
+            fields: [
+                number:             [false, false, 'integer', 6],
+                branch:             [false, false, 'subset', 'com.mfs.entities.Branch'],
+                type:               [false, false, 'select', 'com.mfs.entities.MembershipType'],
+                registrationDate:   [false, false, 'date', 'dd/MM/yyyy'],
+                approvalDate:       [false, false, 'date', 'dd/MM/yyyy'],
+                icNumber:           [true, true, 'string'],
+                gender:             [true, true, 'select', 'com.mfs.entities.Gender'],
+                religion:           [true, false, 'select', 'com.mfs.entities.Religion'],
+                maritalStatus:      [true, true, 'select', 'com.mfs.entities.MaritalStatus'],
+                address:            [true, false, 'text'],
+                city:               [true, true, 'string'],
+                state:              [true, false, 'select', 'com.mfs.entities.State']                
+            ]            
+        ],
+        
+        rejection: [
+            name:           'rejection',
+            object:         'Member',            
+            caption:        'forms.member.reject.label',   //  Window's Title
+            headerField:    'name',                     //  Content Caption
+            target:         ['membership', 'processRejection'],
+            source:         [],         
+            trigger:        true,   //  ~ ${triggered} in GSP
+            triggerAction:  ['home', 'rejected', 'actions.goto.rejected.label'], //  Conditional Action (Button/Link)
+            fields: [
+                number:             [false, false, 'integer', 6],
+                branch:             [false, false, 'subset', 'com.mfs.entities.Branch'],
+                type:               [false, false, 'select', 'com.mfs.entities.MembershipType'],
+                registrationDate:   [false, false, 'date', 'dd/MM/yyyy'],
+                icNumber:           [false, false, 'string'],
+                gender:             [false, false, 'select', 'com.mfs.entities.Gender'],
+                religion:           [false, false, 'select', 'com.mfs.entities.Religion'],
+                maritalStatus:      [false, false, 'select', 'com.mfs.entities.MaritalStatus'],
+                rejectionDate:      [true, true, 'date', -2],
+                remarksRejection:   [true, true, 'text']
+            ]            
+        ],        
+        
         pendingProcess: [
             name:           'updatestatus',
             caption:        'forms.statusUpdate.label',
             target:         ['home', 'updatepending'],
+            source:         [],
             object:         'Member',
             headerField:    'name',
             fields:     [
@@ -98,6 +227,92 @@ class FormsService {
                 remarksRejection:   [true, false, 'text']
             ]
         ]
+    ]
+    
+    /**
+     *  To be passed to GSP:
+     *  -   formData            element of this Map
+     *  -   objectInstance      Associated
+     *  -   parentInstance
+     *  -   subsetData          If required for Fields
+     *  -   winWidth, winHeight Size of Ajax Window
+     */
+    final private updateAssociated = [
+        employment: [
+            caption:    'forms.member.employment.edit.label',
+            name:       'updateEmployment',
+            object:     'Employment',
+            parent:     'Member',
+            header:     'name',         //  Attribute of Parent Object
+            target:     ['home', 'updateEmployment'],
+            source:     ['home', 'employmentview', 'arrow_left.png', 'left'],
+            fields: [
+                //  0           1       2       3       4
+                //  Editable    Mand    Type    Class   Option
+                employer:       [true, true, 'string', 'view-string-data'],
+                sector:         [true, false, 'select', 'com.mfs.entities.EmploymentSector'],
+                type:           [true, false, 'select', 'com.mfs.entities.EmploymentType'],
+                position:       [true, true, 'string', 'view-string-data'],
+                joinDate:       [true, false, 'date', -20],
+                retirementDate: [true, false, 'date', -5],
+                basicSalary:    [true, true, 'string', 'view-string-data', '#,##0.00'],
+//                allowance:      [true, true, 'number', 'view-string-data', '#,##0.00'],
+                contactNumber:  [true, false, 'string', 'view-string-data'],
+                email:          [true, false, 'string', 'view-string-data'],
+                address:        [true, false, 'text', 'view-text-data'],
+                city:           [true, false, 'string', 'view-string-data'],
+                state:          [true, false, 'select', 'com.mfs.entities.State'],
+                postCode:       [true, false, 'string', 'view-string-data', "#####"]                
+            ]
+        ],
+        
+        //  Used for create action
+        associate: [
+            caption:    'forms.member.associate.new.label',
+            name:       'createAssociate',
+            object:     'Associate',
+            parent:     'Member',
+            header:     'name',         //  Attribute of Parent Object
+            target:     ['associate', 'save'],
+            source:     ['home', 'associatesview', 'arrow_left.png', 'left'], 
+            fields: [
+                name:           [true, true, 'string'],
+                relation:       [true, true, 'select', 'com.mfs.entities.Relationship'],
+                guarantor:      [true, true, 'boolean'],
+                gender:         [true, true, 'select', 'com.mfs.entities.Gender'],
+                birthDate:      [true, true, 'date', -50],
+                icNumber:       [true, true, 'string'],
+                address:        [true, false, 'text'],
+                city:           [true, false, 'string'],
+                postCode:       [true, false, 'number', '#####'],
+                employer:       [true, false, 'string'],
+                position:       [true, false, 'string']
+            ]
+        ],
+        
+        //  Used for edit action
+        associateEdit: [
+            caption:    'forms.member.associate.edit.label',
+            name:       'createAssociate',
+            object:     'Associate',
+            parent:     'Member',
+            header:     'name',         //  Attribute of Parent Object
+            target:     ['associate', 'update'],
+            source:     ['home', 'associatesview', 'arrow_left.png', 'left'], 
+            fields: [
+                name:           [true, true, 'string'],
+                relation:       [true, true, 'select', 'com.mfs.entities.Relationship'],
+                guarantor:      [true, true, 'boolean'],
+                gender:         [true, true, 'select', 'com.mfs.entities.Gender'],
+                birthDate:      [true, true, 'date', -50],
+                icNumber:       [true, true, 'string'],
+                address:        [true, false, 'text'],
+                city:           [true, false, 'string'],
+                postCode:       [true, false, 'number', '#####'],
+                employer:       [true, false, 'string'],
+                position:       [true, false, 'string']
+            ]
+        ],        
     ]
     
     /**
@@ -229,10 +444,11 @@ class FormsService {
             cssClass:     'main-content',
             actionsClass: 'centered',
             lineNumber:   true,
-            colspan:      6,
+            colspan:      7,
             emptyMessage: ['empty-list', 'messages.emptyList.label'],
             actions: [    //  With ID of current instance
-                details:  [false, 'icons/edit_small.png', 'actions.icon.details.label', 'controller', 'action', '']
+                details:    [true, 'icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name', 'view_profile', 'forms.member.profile.label', 1200, 600],
+                retire:    [true, 'icons/retirement_small.png', 'icons/retirement_small_over.png', 'actions.icon.retirement.label', 'membership', 'retirement', 'name', 'view_profile', 'forms.member.retirement.label', 800, 600]
             ],
             toolTip:  [   //  Applied to each instance, first column
                 ['member.name.label', 'name'],
@@ -242,10 +458,11 @@ class FormsService {
             ],
             fields: [
                 //              Type     Position   Cell Class    Message Code
+                number:       ['integer', 'centered', 'data-input', 'member.number.label', 6],
                 name:         ['string', 'lefted', 'data-input', 'member.name.label', 40],
                 icNumber:     ['string', 'centered', 'data-input-view', 'member.icNumber.label', 16],
                 approvalDate: ['date', 'centered', 'data-input-view', 'member.approvalDate.label', 'dd/MM/yyyy'],
-                state:        ['string', 'lefted', 'data-input-view', 'member.state.label', 10]
+                state:        ['select', 'lefted', 'data-input-view', 'member.state.label', 25]
             ]
         ],
         
@@ -260,8 +477,9 @@ class FormsService {
                 //          0           1               2           3               4           5           6                   7           8           9     10
                 //          ajax flag, image_normal, image_hover, general title, controller, action name, attribute for title, ajax name,   form title width height
                 details:    [true, 'icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name', 'view_profile', 'forms.member.profile.label', 1200, 600],
-                update:     [false, 'icons/edit_small.png', 'icons/edit_small_over.png', 'actions.icon.edit.label', 'home', 'updatemember', 'name'],
-                process:    [true, 'icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.label', 'home', 'processpending', 'name', 'view_profile', 'forms.member.approve.label', 800, 500]
+                // update:     [false, 'icons/edit_small.png', 'icons/edit_small_over.png', 'actions.icon.edit.label', 'home', 'updatemember', 'name'],
+                process:    [true, 'icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.label', 'home', 'processpending', 'name', 'view_profile', 'forms.member.approve.label', 800, 500],
+                reject:     [true, 'icons/discard_small.png', 'icons/discard_small_over.png', 'actions.icon.reject.label', 'membership', 'reject', 'name', 'view_profile', 'forms.member.reject.label', 800, 620]
             ],
             toolTip:  [   //  Applied to each instance, first column
                 ['member.name.label', 'name'],
@@ -285,9 +503,9 @@ class FormsService {
             colspan:      6,  //  Must include line number, if set to true
             emptyMessage: ['empty-list', 'messages.emptyList.label'],
             actions: [    //  With ID of current instance
-                details:    [false, 'icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name'],
-                update:     [false, 'icons/edit_small.png', 'icons/edit_small_over.png', 'actions.icon.edit.label', 'home', 'updatemember', 'name'],
-                process:    [false, 'icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.label', 'home', 'processrejected', 'name']
+                details:    [true, 'icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name', 'view_profile', 'forms.member.profile.label', 1200, 600],
+                print:      [false, 'icons/printer_small.png', 'icons/printer_small_over.png', 'actions.icon.print.label', 'reportmembership', 'profile', 'name', true]
+                //process:    [false, 'icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.label', 'home', 'processrejected', 'name']
             ],
             toolTip:  [   //  Applied to each instance, first column
                 ['member.name.label', 'name'],
@@ -298,8 +516,8 @@ class FormsService {
             fields: [
                 name:             ['string', 'lefted', 'data-input', 'member.name.label', 40],
                 icNumber:         ['string', 'centered', 'data-input-view', 'member.icNumber.label', 16],
-                rejectedDate:     ['date', 'centered', 'data-input-view', 'member.rejectionDate.label', 'dd/MM/yyyy'],
-                state:            ['string', 'lefted', 'data-input-view', 'member.state.label', 10]
+                rejectionDate:    ['date', 'centered', 'data-input-view', 'member.rejectionDate.label', 'dd/MM/yyyy'],
+                state:            ['select', 'lefted', 'data-input-view', 'member.state.label', 10]
             ]             
         ],
         
@@ -338,7 +556,7 @@ class FormsService {
             emptyMessage: ['empty-list', 'messages.emptyList.label'],
             actions: [    //  With ID of current instance
                 details:    [true, 'icons/details_small.png', 'icons/details_small_over.png', 'actions.icon.details.label', 'home', 'viewmember', 'name', 'view_profile', 'forms.member.profile.label', 1200, 600],
-                process:    [false, 'icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.shares.label', 'home', 'processshares', 'name']
+                process:    [false, 'icons/process_small.png', 'icons/process_small_over.png', 'actions.icon.process.shares.label', 'home', 'processshares', 'name', false]
             ],
             toolTip:  [   //  Applied to each instance, first column
                 ['member.name.label', 'name'],
@@ -354,10 +572,7 @@ class FormsService {
                 state:      ['select', 'lefted', 'data-input-view', 'member.state.label', 25]
             ]              
         ],
-        
-        associates: [
-            
-        ],
+
         activeLoans: [
             
         ],
@@ -379,15 +594,20 @@ class FormsService {
         memberPersonalDetails: [
             objectCode:   'member',
             tabbed:       true,
+            caption:      'forms.member.profile.label',
             cssClass:     ['view-form-container', 'view-row', 'view-cell-caption', 'view-cell-content', 'view-form-footer'],
             tabClass:     ['tabs-container', 'tabs-sec'],
             headerField:  'name',   //  Related to provided objectInstance
             headerClass:  'view-form-header',
             footerClass:  ['footer-caption', 'footer-data'],
+            addMenu:      true,
             tabs: [ //  Based on <ul>
                 personaldata:       [true, 'selected-item', 'tabs.personaldata.label'],
                 employmentdate:     [false, 'unselected-item', 'tabs.employment.label', 'home', 'employmentview'],
                 associates:         [false, 'unselected-item', 'tabs.associates.label', 'home', 'associatesview']
+            ],
+            actionsPane: [
+                button1:    ['right', 'data_edit.png', 'home', 'editmember', 'actions.icon.edit.label']                
             ],
             fields: [
                 branch:             ['string', 'view-string-data', 'member.branch.label'],
@@ -422,13 +642,14 @@ class FormsService {
     final private viewFormsAssociated = [
         //  Employment Details, single association
         employmentDetails: [
+            caption:            'forms.member.profile.label',
             objectCode:         'employment',
             parentObjectCode:   'member',
             headerField:        'name',
             tabbed:             true,
             tabular:            false,
             clickableRows:      false,
-            addMenu:            false,
+            addMenu:            true,
             styles: [
                 main:   ['view-form-container', 'view-row', 'view-cell-caption', 'view-cell-content'],
                 header: 'view-form-header',
@@ -444,7 +665,9 @@ class FormsService {
                 associates:         [false, 'unselected-item',  'tabs.associates.label',    'home', 'associatesview']                
             ],
             inlineActions:  [],     //  Inline actions for instances of associated Object
-            actionsPane:    [],     //  Actions Panel definitions
+            actionsPane:    [
+                button1:    ['right', 'data_edit.png', 'home', 'editEmployment', 'actions.icon.edit.label']                
+            ], 
             tableFields:    [],
             //  Keys must exactly follow names of respective Attributes
             detailFields:   [
@@ -471,6 +694,7 @@ class FormsService {
         
         //  Multiple Instances of Associate, must include Tabular View
         associatesDetails: [
+            caption:            'forms.member.profile.label',
             objectCode:         'associate',
             parentObjectCode:   'member',
             headerField:        'name',     //  Of parentObject
@@ -497,10 +721,11 @@ class FormsService {
                 
             ],
             actionsPane:        [
-                button1:    ['right', 'data_add.png', 'home', 'addassociate', 'actions.icon.add.associate.label']
+                button1:    ['right', 'data_add.png', 'associate', 'create', 'actions.icon.add.associate.label'],
+                button2:    ['right', 'data_edit.png', 'associate', 'edit', 'actions.icon.edit.associate.label']
             ],
             tableFields:        [
-                name:       ['string', 'lefted', 40],
+                name:       ['string', 'lefted', 40],   //  Clickable Column
                 gender:     ['select', 'centered', 25],
                 relation:   ['select', 'lefted', 30],
                 icNumber:   ['string', 'centered', 50]
@@ -546,6 +771,10 @@ class FormsService {
         this.entryForms[formName]
     }
     
+    def getEntryAssociatedForm(String name) {
+        this.entryAssociated[name]
+    }
+    
     def getTabularView(String viewName) {
         this.tabularViews[viewName]
     }
@@ -560,5 +789,13 @@ class FormsService {
     
     def getViewFormAssociated(String name) {
         this.viewFormsAssociated[name]
+    }
+    
+    def getUpdateDirectForm(String name) {
+        this.updateDirectForms[name]
+    }
+    
+    def getUpdateAssociatedForm(String name) {
+        this.updateAssociated[name]
     }
 }

@@ -10,4 +10,8 @@ class Relationship {
         value_EN nullable: false, blank: false
         value_MS nullable: false, blank: false
     }
+    
+    public String toString() {
+        value_EN
+    }
 }

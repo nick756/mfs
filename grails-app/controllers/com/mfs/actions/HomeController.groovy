@@ -12,9 +12,12 @@ import grails.util.Environment
  *  related to User Role (Branches, etc)
  **/
 class HomeController {
-    def messageSource
+    
     def menuService
     def formsService
+    def membershipService
+    
+    def messageSource
     def grailsApplication
     
     /**
@@ -151,10 +154,82 @@ class HomeController {
             //searchForm: formsService.getSearchForm('searchActiveMember'),
             fragment: '01',
             //searchData: searchData,
-            viewForm: formsService.getViewForm('memberPersonalDetails')
+            viewForm: formsService.getViewForm('memberPersonalDetails'),
+            winWidth: 1200,
+            winHeight: 600
         ]        
     }
     
+    /**
+     *  Rendering popup Window with Details of selected Member, for further
+     *  updating details
+     */
+    def editmember(Member objectInstance) {
+        println ''
+        println "Member Details Update Form: ${objectInstance?.name}"
+        println "Belongs to Branch: ${objectInstance?.branch}"
+        
+        Organization org = Organization.get(session?.organization?.id)        
+        def subsetData = [:]
+        
+        subsetData['branch'] = Branch.findAllByOrganization(org).toList()        
+        
+        render template: '/common/updateDirectForm', model: [
+            objectInstance: objectInstance,
+            formData:       formsService.getUpdateDirectForm('editMember'),
+            subsetData:     subsetData,
+            winWidth:       800,
+            winHeight:      620
+        ]
+    }
+    
+    /**
+     *  Updating Membership Record (Biodata), displaying the same Template
+     *  as during operation origination
+     */
+    def updatemember(Member objectInstance) {
+        def successMessage = null
+        def failureMessage = null
+        
+        println '\nUpdate Member Details'
+        println "Passed: ${objectInstance?.name}/${objectInstance?.status}"
+        println "Belongs to ${objectInstance?.organization?.name}"
+        
+        
+        Organization org = Organization.get(session?.organization?.id)        
+        def subsetData = [:]
+        subsetData['branch'] = Branch.findAllByOrganization(org).toList()        
+        
+        if(objectInstance.hasErrors()) {
+            render template: '/common/updateDirectForm', model: [
+                objectInstance: objectInstance,
+                formData:       formsService.getUpdateDirectForm('editMember'),
+                subsetData:     subsetData,
+                successMessage: successMessage,
+                winWidth:       800,
+                winHeight:      620
+            ]
+        
+            return
+        }
+        
+        objectInstance.save(flush: true)
+
+        successMessage = message(code: 'actions.member.update.success')
+     
+        render template: '/common/updateDirectForm', model: [
+            objectInstance: objectInstance,
+            formData:       formsService.getUpdateDirectForm('editMember'),
+            subsetData:     subsetData,
+            successMessage: successMessage,
+            winWidth:       800,
+            winHeight:      620
+        ]        
+    }
+    
+    /**
+     *  Method is not meant for Ajax enabled Forms
+     */
     def resetSearch() {
         def target = params?.target
         
@@ -312,7 +387,9 @@ class HomeController {
             menuList: menuService.generateSideMenu('home', 'newmember'),
             fragment: '01',
             objectInstance: member,
-            subsetData: subsetData
+            subsetData: subsetData,
+            winHeight: 620,
+            winWidth: 800
         ]
     }
     
@@ -365,7 +442,9 @@ class HomeController {
                 fragment: '01',
                 objectInstance: memberInstance,
                 errorsList: memberInstance.errors,
-                subsetData: subsetData
+                subsetData: subsetData,
+                winHeight: 620,
+                winWidth: 800                
             ]
             
             return            
@@ -382,6 +461,7 @@ class HomeController {
         memberInstance.lastUpdated      = new Date()
         memberInstance.status           = statusPending
         memberInstance.operatorEntry    = session?.user?.name
+        memberInstance.retired          = false
         
         if(!memberInstance.validate()) {
             render template: '/common/genericForm', model: [
@@ -391,17 +471,21 @@ class HomeController {
                 fragment: '01',
                 objectInstance: memberInstance,
                 errorsList: memberInstance.errors,
-                subsetData: subsetData
+                subsetData: subsetData,
+                winHeight: 620,
+                winWidth: 800                
             ]
             
             return
         }
         else {
             memberInstance.save(flush: true)
+            membershipService.assignNumber(memberInstance)
+            membershipService.createEmployment(memberInstance)
         }
         
         //redirect action: 'pending'
-        render "Membership Record created: $memberInstance?.name"
+        render "Membership Record created: ${memberInstance?.number} ${memberInstance?.name}"
     }
     
     /**
@@ -424,7 +508,7 @@ class HomeController {
         
         println "Action: employmentview ${new Date()}"
         println "Parent: ${parentInstance?.name} employmentID: ${employmentID}"
-        println "Data found: ${employmentData}"
+        println "Data found: ${employmentData} ${employmentData?.basicSalary} - ${employmentData?.allowance}"
         
         //render view: '/common/showAssociated', model: [
         render template: '/common/viewFormAssociated', model: [
@@ -433,7 +517,9 @@ class HomeController {
             viewForm:           formsService.getViewFormAssociated('employmentDetails'),
             parentInstance:     parentInstance,
             instancesList:      objectInstances,
-            currentInstance:     employmentData
+            currentInstance:     employmentData,
+            winWidth: 1200,
+            winHeight: 600            
         ]
     }
     
@@ -446,7 +532,19 @@ class HomeController {
         def instancesList = []
         def currentInstance = null
         
-        instancesList = parentInstance?.associates
+        instancesList = parentInstance?.associates.asList()
+        instancesList.sort{it.name}
+        
+        if(!params?.selectedID) {
+            currentInstance = instancesList[0]
+        }
+        else {
+            currentInstance = Associate.get(new Integer(params.selectedID))
+        }
+        
+        println ''
+        println "home.associatesview: ${parentInstance?.name}"
+        println "Associates count: ${parentInstance?.associates.size()}"
         
         //render view: '/common/showAssociated', model: [
         render template: '/common/viewFormAssociated', model: [
@@ -454,7 +552,9 @@ class HomeController {
             viewForm:           formsService.getViewFormAssociated('associatesDetails'),
             parentInstance:     parentInstance,
             instancesList:      instancesList,
-            currentInstance:    currentInstance
+            currentInstance:    currentInstance,
+            winWidth: 1200,
+            winHeight: 600            
         ]
     }
     
@@ -773,8 +873,116 @@ class HomeController {
         ]        
     }
     
+    /**
+     *  Methods for processing Pending Members: approval or rejection. Operations
+     *  are being performed in Ajax Forms
+     */
     def processpending(Member objectInstance) {
         
         render template: 'processpending', model: [objectInstance: objectInstance]
+    }
+    
+    def updatepending(Member objectInstance) {
+        
+        def status
+        def successMessage = null
+        def failureMessage = null
+        boolean showLink = false
+        
+        println ''
+        println "Method: updatepending"
+        
+        if(objectInstance.hasErrors()) {
+            println "Registration Date: ${params?.regsitrationDate}"
+            println "Errors detected: ${objectInstance.errors}"
+            respond objectInstance.errors, template: 'processpending'
+            return
+        }
+        
+        if(objectInstance?.approvalDate) {
+            println 'Approval Date entered' + objectInstance?.approvalDate
+            
+            status = MemberStatus.findByCode(20)
+            
+            if(membershipService.verifyEmployment(objectInstance) && membershipService.verifyAssociates(objectInstance)) {
+                objectInstance.status = status
+                successMessage = message(code: 'actions.member.pendingupdate.success')
+                showLink = true
+            }
+            else {
+                failureMessage = message(code: 'actions.member.pendingupdate.failure')
+                showLink = false
+            }
+        }
+        else {
+            failureMessage = message(code: 'actions.member.pendingupdate.failure')
+        }
+        
+        objectInstance.save(flush: true)
+        
+        println '...after save operation'
+        
+        render template: 'processpending', model: [
+            objectInstance:     objectInstance,
+            successMessage:     successMessage,
+            failureMessage:     failureMessage,
+            showPendingLink:    showLink
+        ]
+    }
+    
+    def editEmployment(Employment objectInstance) {
+        def parentID = objectInstance?.member?.id
+        def parentInstance = Member.get(parentID)
+        def subsetData = [:]
+        
+//        println ''
+//        println "Method 'editEmployment': ${objectInstance} of ${parentInstance?.name}"
+//        println "${formsService.getUpdateAssociatedForm('employment')}"
+        
+        render template: '/common/updateAssociatedForm', model: [
+            formData:       formsService.getUpdateAssociatedForm('employment'),
+            objectInstance: objectInstance,
+            parentInstance: parentInstance,
+            subsetData:     subsetData,
+            winWidth:       800,
+            winHeight:      600
+        ]
+    }
+    
+    def updateEmployment(Employment empInstance) {
+        def successMessage = null
+        def failureMessage = null
+        def subsetData = [:]
+        def parentInstance = Member.get(params?.parentID)
+        
+//        println ''
+//        println "Method: updateEmployment ${empInstance}"
+//        println "ID Passed: ${params?.id} Parent: ${parentInstance?.name}"
+        
+        if(empInstance.hasErrors()) {
+            render template: '/common/updateAssociatedForm', model: [
+                formData:       formsService.getUpdateAssociatedForm('employment'),
+                objectInstance: empInstance,
+                parentInstance: parentInstance,
+                subsetData:     subsetData,
+                winWidth:       800,
+                winHeight:      600
+            ]
+            
+            return
+        }
+        
+        empInstance.save(flush: true)
+        successMessage = message(code: 'actions.employment.update.success')
+        
+        render template: '/common/updateAssociatedForm', model: [
+            formData:       formsService.getUpdateAssociatedForm('employment'),
+            objectInstance: empInstance,
+            parentInstance: parentInstance,
+            subsetData:     subsetData,
+            successMessage: successMessage,
+            winWidth:       800,
+            winHeight:      600
+        ]
     }
 }

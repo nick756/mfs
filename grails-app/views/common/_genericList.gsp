@@ -51,6 +51,7 @@
                                 </g:if>
                                 <g:if test="${field.value[0] == 'date'}"><g:formatDate format="${field.value[4]}" date="${currentInstance[field.key]}"/></g:if>
                                 <g:if test="${field.value[0] == 'number'}"><g:formatNumber number="${currentInstance[field.key]}" format="${field.value[4]}" /></g:if>
+                                <g:if test="${field.value[0] == 'integer'}"><g:formatNumber number="${currentInstance[field.key]}" minIntegerDigits="${field.value[4]}" /></g:if>
                             </td>
                         </g:each>
                         <%-- Compiling Actions for current Object instance --%>
@@ -58,15 +59,15 @@
                         <td class="${tabularView['actionsClass']}">
                             <g:each in="${tabularView?.actions}" var="actionItem" status="k">
                                 <g:if test="${actionItem.value[0] == false}">
-                                    <g:link style="text-decoration: none;" controller="${actionItem.value[4]}" action="${actionItem.value[5]}" id="${currentInstance?.id}" params="['params': params]">
+                                    <g:link style="text-decoration: none;" controller="${actionItem.value[4]}" action="${actionItem.value[5]}" id="${currentInstance?.id}" params="['params': params]" target="${actionItem.value[7] ? '_blank' : ''}">
                                     <img src="${resource(dir: 'images', file: actionItem.value[1])}" 
                                          title="${message(code: actionItem.value[3]) + ': ' + currentInstance[actionItem.value[6]]}" 
                                          onmouseover='this.src="${resource(dir: 'images', file: actionItem.value[2])}"'
-                                         onmouseout='this.src="${resource(dir: 'images', file: actionItem.value[1])}"'/>
+                                         onmouseout='this.src="${resource(dir: 'images', file: actionItem.value[1])}"' />
                                     </g:link>
                                 </g:if>
                                 <g:else>
-                                    <a style="text-decoration: none; outline: none;" href="#" name="${actionItem.value[7]}" cont="${actionItem.value[4]}" act="${actionItem.value[5]}" caption="${message(code: actionItem.value[8])}" width="${actionItem.value[9]}" height="${actionItem.value[10]}" id="${currentInstance?.id}" params="['params': params]">
+                                    <a style="text-decoration: none; outline: none; cursor: pointer;" name="${actionItem.value[7]}" cont="${actionItem.value[4]}" act="${actionItem.value[5]}" caption="${message(code: actionItem.value[8])}" width="${actionItem.value[9]}" height="${actionItem.value[10]}" id="${currentInstance?.id}" params="['params': params]">
                                     <img src="${resource(dir: 'images', file: actionItem.value[1])}" 
                                          title="${message(code: actionItem.value[3]) + ': ' + currentInstance[actionItem.value[6]]}" 
                                          onmouseover='this.src="${resource(dir: 'images', file: actionItem.value[2])}"'

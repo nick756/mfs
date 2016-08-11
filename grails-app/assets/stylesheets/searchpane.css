@@ -52,6 +52,7 @@
 .action-image {
     outline: none;
     transition: all 0.7s;
+    margin-left: 4px;
 }
 
 .action-image:hover {

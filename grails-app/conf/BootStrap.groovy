@@ -77,7 +77,7 @@ class BootStrap {
         
         if(MembershipType.list().size() == 0) {
             println ''
-            println 'Generating instance of MembershipType...'
+            println 'Generating instances of MembershipType...'
             
             new MembershipType(code: 10, value_EN: 'Benefit', value_MY: 'Manfaat').save(flush: true)
             new MembershipType(code: 20, value_EN: 'Loan', value_MY: 'Pinjaman').save(flush: true)
@@ -86,7 +86,31 @@ class BootStrap {
             println "... total instances created: ${MembershipType.list().size()}"
         }
         
+        if(EmploymentSector.list().size() == 0) {
+            println ''
+            println 'Generating list of instances for Employment Sector...'
+            
+            new EmploymentSector(code: 10, value_EN: 'GOVERNMENT', value_MS: 'GOVERNMENT').save(flush: true)
+            new EmploymentSector(code: 20, value_EN: 'GOVERNMENT LINKED', value_MS: 'GOVERNMENT LINKED').save(flush: true)
+            new EmploymentSector(code: 30, value_EN: 'PRIVATE', value_MS: 'PRIVATE').save(flush: true)
+            new EmploymentSector(code: 40, value_EN: 'POLICE', value_MS: 'POLICE').save(flush: true)
+            
+            println "... total Records created: ${EmploymentSector.list().size()}"
+        }
+        
+        if(EmploymentType.list().size() == 0) {
+            println ''
+            println "Populating Employment Type Table ..."
+            
+            new EmploymentType(code: 10, value_EN: 'PERMANENT', value_MS: "PERMANENT").save(flush: true)
+            new EmploymentType(code: 20, value_EN: 'TEMPORARY', value_MS: "TEMPORARY").save(flush: true)
+            new EmploymentType(code: 30, value_EN: 'CONTRACT', value_MS: "CONTRACT").save(flush: true)
+            
+            println "... total Records created: ${EmploymentType.list().size()}"
+        }
+        
         if(Organization.list().size() == 0) {
+            
             def org = new Organization(
                 code: 1,
                 name: 'Superior Cooperators Bhd',
@@ -94,6 +118,24 @@ class BootStrap {
             )
             
             org.save(flush: true)
+            
+            def generator = new MemberNumberGenerator(
+                serialNumber: 0,
+                effectiveDate: new Date(),
+                organization: org
+            )
+            
+            if(!generator.save()) {
+                println "\nError while saving MemberNumberGenerator:\n${generator.errors.allErrors.join('\n')}"
+            }
+            else {
+                println "Number Generator created: ${generator?.serialNumber}"
+            }  
+            
+            if(generator) {
+                org.numberGenerator = generator
+                org.save()
+            }
             
             def branch = new Branch(
                 code: 0,
@@ -152,16 +194,11 @@ class BootStrap {
         //  Populating list of Genders
         if(Gender.list().size() == 0) {
             println ''
-            println 'Generating instance of Gender...'
-            def inst
+            println 'Generating instances of Gender...'
             
-            inst = new Gender(code: 1, value_EN: 'Male', value_MS: 'Lelaki')
-            
-            if(!inst.save()) {
-                println inst.errors.allErrors.join("\n")
-            }
-            
+            new Gender(code: 1, value_EN: 'Male', value_MS: 'Lelaki').save(flush: true)
             new Gender(code: 2, value_EN: 'Female', value_MS: 'Perempuan').save(flush: true)
+            
             println "... instances created: ${Gender.list().size()}"
             
         }

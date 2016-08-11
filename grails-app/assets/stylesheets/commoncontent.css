@@ -24,9 +24,14 @@ table.main-content {
     border-collapse: separate;
 }
 
+table.main-content.larger {
+    font-size: 11pt;
+}
+
 table.main-content caption {
     font-family: 'Muli', sans-serif;
-    font-size: 24px;
+    font-size: 14pt;
+    font-weight: normal;
     text-align: left;
     margin-bottom: 5px;
 }
@@ -58,6 +63,10 @@ table.main-content tr.even {
 
 table.main-content tr.odd {
     background: #FFF;
+}
+
+table.main-content tr.selected {
+    background: #CBFFFA;
 }
 
 table.main-content th.asc a {
@@ -135,7 +144,7 @@ table.main-content td.bolded {
         background: white;
 }
 
-.ui-dialog .ui-dialog-titlebar {background: #536878; height: auto; padding: 5px 2px 5px 10px; font-family: 'Muli', sans-serif; font-size: 16pt; color: #cbfffa;}
+.ui-dialog .ui-dialog-titlebar {background: #536878; height: auto; padding: 5px 2px 7px 10px; font-family: 'Muli', sans-serif; font-weight: normal; font-size: 12pt; color: #FFF;}
 
 .ui-widget-shadow {
 	margin: -8px 0 0 -8px;

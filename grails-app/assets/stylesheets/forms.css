@@ -97,6 +97,17 @@ div.form-row {
     margin-bottom: 5px;
 }
 
+.errors.centered {
+    text-align: center;
+}
+
+/* Form Holder for Ajax */
+div.form-holder-embedded {
+    width: auto;
+    display: table;
+    padding: 10px;
+}
+
 /* Styling Date Picker Widgets */
 
 [id$="_day"] {

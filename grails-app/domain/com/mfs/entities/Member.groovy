@@ -8,15 +8,21 @@ class Member {
     Date birthDate
     
     Date approvalDate
-    Date registrationDate
+    Date registrationDate   //  ~ Application Date
     Date rejectionDate
     Date retirementDate
+    
+    //  Retirement related
+    Date retirementRequestDate
+    boolean retired
+    
     
     Organization    organization
     MemberStatus    status
     MembershipType  type
     
     String name
+    Integer number
     String icNumber
     Gender gender
     Religion religion
@@ -55,6 +61,7 @@ class Member {
     ]
     
     static constraints = {
+        number          nullable: true
         associates      nullable: true
         mCharges        nullable: true
         religion        nullable: true
@@ -79,6 +86,9 @@ class Member {
         remarksGeneral      maxSize: 10240, nullable: true
         remarksApproval     maxSize: 10240, nullable: true
         remarksRejection    maxSize: 10240, nullable: true
+        
+        retirementRequestDate   nullable: true
+        retired                 nullable: true
     }
     
     public String toString() {

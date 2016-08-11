@@ -13,6 +13,17 @@
             </ul>
         </div>
     </g:if>
+    <%-- Rendering Horizontal Actions Panel, if applicable  --%>
+    <g:if test="${viewForm?.addMenu}">
+        <div class="form-action-panel">
+            <%--g:link><img class="action-image" src="${resource(dir: 'images', file: 'arrow_left.png')}"></g:link--%>
+            <g:each in="${viewForm?.actionsPane}" var="actionItem" status="k">
+                <g:remoteLink update="dialog" controller="${actionItem.value[2]}" action="${actionItem.value[3]}" id="${objectInstance?.id}">
+                    <img class="action-image" style="float: ${actionItem.value[0]}" src="${resource(dir: 'images', file: actionItem.value[1])}"/>
+                </g:remoteLink>
+            </g:each>
+        </div>
+    </g:if>    
     <%-- Displaying Content (for provided objectInstance) --%>
     <div class="${viewForm.cssClass[0]}">
         <g:each in="${viewForm.fields}" var="field" status="index">
@@ -48,3 +59,13 @@
         </g:if>
     </div>
 </div>
+        <g:javascript>
+            var winHeight = "${winHeight}";
+            var winWidth  = "${winWidth}";
+
+            $("#dialog").dialog("option", "title", "${message(code: viewForm?.caption)}");
+            $("#dialog").dialog( "option", "height", winHeight );
+            $("#dialog").dialog( "option", "width", winWidth );
+            $("#dialog").dialog("option", "position", {my: "center", at: "center", of: window});
+            $('#dialog').animate({scrollTop: 0}, 300);
+        </g:javascript>

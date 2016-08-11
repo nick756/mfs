@@ -44,5 +44,16 @@
             <%-- Tag 'formRemote' is deprecated in Grails 2.5: not functioning; replaced by below construct --%>
             <g:submitToRemote url="${['controller': formData.target[0], 'action': formData.target[1]]}" update="dialog" value="${message(code: 'actions.submit.label')}" class="myButton dark"/>
         </g:form>
+        <%-- Processing Popup Window after re-loading content: resizing and scrolling to top --%>
+        <g:javascript>
+            var winHeight = "${winHeight}";
+            var winWidth  = "${winWidth}";
+
+            $("#dialog").dialog("option", "title", "${message(code: formData?.caption)}");
+            $("#dialog").dialog( "option", "height", winHeight );
+            $("#dialog").dialog( "option", "width", winWidth );
+            $("#dialog").dialog("option", "position", {my: "center", at: "center", of: window});
+            $('#dialog').animate({scrollTop: 0}, 300);
+        </g:javascript>
     </body>
 </html>
